@@ -63,6 +63,6 @@ export default server.listen(port, () => {
     routes.forEach((route: CommonRoutesConfig) => {
         debugLog(`Routes configured for ${route.getName()}`);
     });
-    // InventoryJob.CleanDb()
+    InventoryJob.CleanDb()
     console.log(runningMessage);
 });
