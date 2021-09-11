@@ -53,7 +53,7 @@ app.use(expressWinston.logger(loggerOptions));
 routes.push(new InventoryRoutes(app));
 
 // this is a simple route to make sure everything is working properly
-const runningMessage = `Perishable Inventory Server running at port ${port}`;
+const runningMessage = `Perishable Inventory Version Number: BEM202103 Server running at port ${port}`;
 
 app.get('/', (req: express.Request, res: express.Response) => {
     res.status(200).send(runningMessage)
