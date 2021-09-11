@@ -35,26 +35,32 @@ class InventoryMiddleware {
         res: express.Response,
         next: express.NextFunction
     ) {
-        const {name,quantity} = req.body
-        if (typeof quantity === 'number') {
-            const item = await InventoryService.itemQuantity(name)
-            if(item.quantity){
-                const itemQuantity = item.quantity
-                if(itemQuantity < quantity){
-                    res.status(400).send({
-                        error: `Quantity exceed available quantity`,
-                    });
+        try{
+            const {name,quantity} = req.body
+            if (typeof quantity === 'number') {
+                const item = await InventoryService.itemQuantity(name)
+                if(item.quantity){
+                    const itemQuantity = item.quantity
+                    if(itemQuantity < quantity){
+                        res.status(400).send({
+                            error: `Quantity exceed available quantity`,
+                        });
+                    }else{
+                        next()
+                    }
                 }else{
-                    next()
+                    res.status(400).send({
+                        error: `Item not available or expired`,
+                    });
                 }
             }else{
                 res.status(400).send({
-                    error: `Item not available or expired`,
+                    error: `Quantity most be a number`,
                 });
             }
-        }else{
+        }catch(e){
             res.status(400).send({
-                error: `Quantity most be a number`,
+                error: `error`,
             });
         }
     }

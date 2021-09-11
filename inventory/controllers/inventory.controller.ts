@@ -11,25 +11,37 @@ const log: debug.IDebugger = debug('app:users-controller');
 class InventoryController {
     
     async addItem(req: express.Request, res: express.Response) {
-        req.body.expiry = new Date(req.body.expiry);
-        const addLotOfItem: InventoryDto = req.body;
-        const item = await InventoryService.addItem(addLotOfItem);
-        res.status(200).send({});
+        try{
+            req.body.expiry = new Date(req.body.expiry);
+            const addLotOfItem: InventoryDto = req.body;
+            const item = await InventoryService.addItem(addLotOfItem);
+            res.status(200).send({});
+        }catch(e){
+            res.status(400).send({
+                error: "error",
+            });
+        }
     }
 
     async itemQuantity(req: express.Request, res: express.Response) {
-        const name = req.body.name
-        const result = await InventoryService.itemQuantity(name);
-        if(result.quantity == 0 || result.quantity == null ){
-            res.status(200).send({
-                quantity:0,
-                validTill:null
+        try{
+            const name = req.body.name
+            const result = await InventoryService.itemQuantity(name);
+            if(result.quantity == 0 || result.quantity == null ){
+                res.status(200).send({
+                    quantity:0,
+                    validTill:null
+                });
+            }
+            else{
+                var date = new Date(result.validTill)
+                result.validTill = date.getTime()
+                res.status(200).send(result);
+            }
+        }catch(e){
+            res.status(400).send({
+                error: "error",
             });
-        }
-        else{
-            var date = new Date(result.validTill)
-            result.validTill = date.getTime()
-            res.status(200).send(result);
         }
     }
 

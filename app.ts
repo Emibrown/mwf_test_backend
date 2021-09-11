@@ -4,6 +4,7 @@ import express from 'express';
 import * as http from 'http';
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
+import compression from "compression";
 import cors from 'cors';
 import {CommonRoutesConfig} from './common/common.routes.config';
 import {InventoryRoutes} from './inventory/inventory.routes.config';
@@ -25,6 +26,8 @@ app.use(express.json());
 
 // adding middleware to allow cross-origin requests
 app.use(cors());
+
+app.use(compression());
 
 // preparing the expressWinston logging middleware configuration,
 // which will automatically log all HTTP requests handled by Express.js
