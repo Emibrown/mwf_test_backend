@@ -10,7 +10,7 @@ class InventoryJob {
     }
 
     public CleanDb() {
-        schedule.scheduleJob('* * * * *', async function () {
+        schedule.scheduleJob('*/59 * * * *', async function () {
             const addRepository = getRepository(InventoryEntity)
             await addRepository.delete({expiry:LessThanOrEqual(new Date())})
         });
