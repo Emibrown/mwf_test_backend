@@ -62,7 +62,7 @@ export default server.listen(port, () => {
     routes.forEach((route: CommonRoutesConfig) => {
         debugLog(`Routes configured for ${route.getName()}`);
     });
-    InventoryJob.CleanDb()
+    // InventoryJob.CleanDb()
     // our only exception to avoiding console.log(), because we
     // always want to know when the server is done starting up
     console.log(runningMessage);

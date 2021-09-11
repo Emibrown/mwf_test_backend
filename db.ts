@@ -14,7 +14,7 @@ class DB {
         host: config.db_host,
         port: 5432,
         username: config.db_username,
-        password: "",
+        password: config.db_password,
         database: config.db,
         synchronize: true,
         entities: [InventoryEntity],
