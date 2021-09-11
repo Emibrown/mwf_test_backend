@@ -1,12 +1,10 @@
-// we import express to add types to the request/response objects from our controller functions
 import express from 'express';
 
-// we import our newly created user services
 import InventoryService from '../services/inventory.service';
 
 import { InventoryDto } from '../dto/inventory.dto';
 
-// we use debug with a custom context as described in Part 1
+// debug with a custom context as described in Part 1
 import debug from 'debug';
 
 const log: debug.IDebugger = debug('app:users-controller');

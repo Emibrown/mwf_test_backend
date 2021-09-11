@@ -1,5 +1,5 @@
 import { InventoryDto } from '../dto/inventory.dto';
-import { getRepository, LessThan, MoreThan, getManager } from 'typeorm';
+import { getRepository, LessThan, MoreThan, getManager, MoreThanOrEqual } from 'typeorm';
 import InventoryEntity from '../entity/inventory.entity';
 import utils from '../../common/utils/utils';
 import debug from 'debug';
@@ -24,7 +24,7 @@ class InventoryDao {
         const addRepository = getRepository(InventoryEntity)
         const items = addRepository.createQueryBuilder("inventoryEntity")
         .where("inventoryEntity.name = :name", { name: name })
-        .andWhere("inventoryEntity.expiry > :expiry", { expiry: new Date() })
+        .andWhere("inventoryEntity.expiry >= :expiry", { expiry: new Date() })
         .select("SUM(inventoryEntity.quantity)::int as quantity")
         .addSelect("MIN(inventoryEntity.expiry)", "validTill")
         .getRawOne(); 
@@ -45,7 +45,7 @@ class InventoryDao {
             const itemQuantity = await transactionalEntityManager.createQueryBuilder()
             .from(InventoryEntity,"inventoryEntity")
             .where("inventoryEntity.name = :name", { name: name })
-            .andWhere("inventoryEntity.expiry > :expiry", { expiry: new Date() })
+            .andWhere("inventoryEntity.expiry >= :expiry", { expiry: new Date() })
             .select("SUM(inventoryEntity.quantity)::int as quantity")
             .addSelect("MIN(inventoryEntity.expiry)", "validTill")
             .getRawOne(); 
@@ -56,7 +56,7 @@ class InventoryDao {
             const items = await transactionalEntityManager.find(InventoryEntity,{
                 where: {
                     "name" : name,
-                    "expiry": MoreThan(new Date()),
+                    "expiry": MoreThanOrEqual(new Date()),
                     "quantity": MoreThan(0)
                 },
                 order: {

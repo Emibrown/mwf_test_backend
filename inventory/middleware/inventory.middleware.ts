@@ -68,7 +68,7 @@ class InventoryMiddleware {
         const todayDate = moment();
         const itemDate = moment(req.body.expiry);
         const dDiff = itemDate.diff(todayDate);
-        if (dDiff > 0) {
+        if (dDiff >= 0) {
             next();
         }else{
             res.status(400).send({
