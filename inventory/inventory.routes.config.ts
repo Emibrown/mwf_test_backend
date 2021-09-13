@@ -14,7 +14,7 @@ export class InventoryRoutes extends CommonRoutesConfig {
 
         this.app.post(`/:item/add`, [
             InventoryMiddleware.validateRequiredAddItemBodyFields,
-            InventoryMiddleware.checkForExpiriedItem,
+            // InventoryMiddleware.checkForExpiriedItem,
             InventoryController.addItem
         ]);
 
