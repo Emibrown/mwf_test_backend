@@ -21,8 +21,15 @@ class InventoryMiddleware {
         res: express.Response,
         next: express.NextFunction
     ) {
-        if (req.body && req.body.quantity && req.body.expiry) {
-            next();
+        const {quantity,expiry} = req.body
+        if (req.body && quantity && expiry) {
+            if (typeof quantity === 'number' && typeof expiry === 'number') {
+                next();
+            }else{
+                res.status(400).send({
+                    error: `Invalied data`,
+                });
+            }
         } else {
             res.status(400).send({
                 error: `Missing required fields`,
@@ -71,29 +78,29 @@ class InventoryMiddleware {
         res: express.Response,
         next: express.NextFunction
     ) {
-        // const todayDate = moment();
-        // const itemDate = moment(req.body.expiry);
-        // const dDiff = itemDate.diff(todayDate);
-        // if (dDiff > 0) {
-        //     next();
-        // }else{
-        //     res.status(400).send({
-        //         error: `Item already expiried`,
-        //     });
-        // }
-
-        const date = new Date()
-        const todayDate = date.getTime()
-        const itemDate = req.body.expiry;
-
-
-        if (todayDate < itemDate) {
+        const todayDate = moment();
+        const itemDate = moment(req.body.expiry);
+        const dDiff = itemDate.diff(todayDate);
+        if (dDiff > 0) {
             next();
         }else{
             res.status(400).send({
                 error: `Item already expiried`,
             });
         }
+
+        // const date = new Date()
+        // const todayDate = date.getTime()
+        // const itemDate = req.body.expiry;
+
+        // if (todayDate < itemDate) {
+        //     next();
+        // }else{
+        //     res.status(400).send({
+        //         error: `Item already expiried`,
+        //     });
+        // }
+        
     }
     
 
