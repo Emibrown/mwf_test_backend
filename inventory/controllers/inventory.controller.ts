@@ -12,6 +12,7 @@ class InventoryController {
     
     async addItem(req: express.Request, res: express.Response) {
         try{
+            console.log(req.body);
             req.body.expiry = new Date(req.body.expiry);
             const addLotOfItem: InventoryDto = req.body;
             const item = await InventoryService.addItem(addLotOfItem);
