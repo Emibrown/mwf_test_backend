@@ -63,7 +63,7 @@ app.get('/', (req: express.Request, res: express.Response) => {
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.log(err)
-    res.statusCode = 401;
+    res.statusCode = 400;
     res.end(err.message);
 };
 
