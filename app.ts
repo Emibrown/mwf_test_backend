@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import express from 'express';
+import type { ErrorRequestHandler } from "express";
 import * as http from 'http';
 import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use(compression());
+
 
 // preparing the expressWinston logging middleware configuration,
 // which will automatically log all HTTP requests handled by Express.js
@@ -58,6 +60,16 @@ const runningMessage = `Perishable Inventory Version Number: BEM202103 Server ru
 app.get('/', (req: express.Request, res: express.Response) => {
     res.status(200).send(runningMessage)
 });
+
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+    console.log(err)
+    res.statusCode = 401;
+    res.end(err.message);
+};
+
+// fallthrough error handler
+app.use(errorHandler);
+
 
 export default server.listen(port, () => {
     routes.forEach((route: CommonRoutesConfig) => {
