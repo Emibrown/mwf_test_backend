@@ -1,11 +1,8 @@
 import 'reflect-metadata';
 import { ConnectionOptions, createConnection, getConnection } from 'typeorm';
-import debug from 'debug';
-import InventoryEntity from './inventory/entity/inventory.entity';
+import UserEntity from './user/entity/user.entity';
 import config from "./common/utils/config"
 
-
-const log: debug.IDebugger = debug('app:mongoose-service');
 
 class DB {
 
@@ -17,7 +14,7 @@ class DB {
         password: config.db_password,
         database: config.db,
         synchronize: true,
-        entities: [InventoryEntity],
+        entities: [UserEntity],
     };
 
     intializeDB() {

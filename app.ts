@@ -7,11 +7,8 @@ import * as winston from 'winston';
 import * as expressWinston from 'express-winston';
 import compression from "compression";
 import cors from 'cors';
-import {CommonRoutesConfig} from './common/common.routes.config';
-import {InventoryRoutes} from './inventory/inventory.routes.config';
-import debug from 'debug';
+import { UserRoutes } from "./user/user.routes.config";
 import Db from "./db";
-import InventoryJob from "./jobs/inventory.job";
 import config from "./common/utils/config"
 
 Db.intializeDB()
@@ -19,8 +16,7 @@ Db.intializeDB()
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
 const port = config.port;
-const routes: Array<CommonRoutesConfig> = [];
-const debugLog: debug.IDebugger = debug('app');
+
 
 // adding middleware to parse all incoming requests as JSON 
 app.use(express.json());
@@ -52,10 +48,12 @@ if (!process.env.DEBUG) {
 // initialize the logger with the above configuration
 app.use(expressWinston.logger(loggerOptions));
 
-routes.push(new InventoryRoutes(app));
+
+new UserRoutes(app)
+
 
 // this is a simple route to make sure everything is working properly
-const runningMessage = `Perishable Inventory Version Number: BEM202103 Server running at port ${port}`;
+const runningMessage = `Two step registration running at port ${port}`;
 
 app.get('/', (req: express.Request, res: express.Response) => {
     res.status(200).send(runningMessage)
@@ -72,9 +70,5 @@ app.use(errorHandler);
 
 
 export default server.listen(port, () => {
-    routes.forEach((route: CommonRoutesConfig) => {
-        debugLog(`Routes configured for ${route.getName()}`);
-    });
-    InventoryJob.CleanDb()
     console.log(runningMessage);
 });
