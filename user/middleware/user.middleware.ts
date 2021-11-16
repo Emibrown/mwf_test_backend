@@ -8,7 +8,7 @@ const log: debug.IDebugger = debug('app:users-controller');
 
 const registerSchema = Joi.object({
     "email": Joi.string().email().required(),
-    "password": Joi.string().min(8).max(128).required(),
+    "password": Joi.string().min(10).max(128).required(),
     "name": Joi.string().max(50).required(),
 })
 
@@ -41,7 +41,7 @@ class UserMiddleware {
             next()
         }
         catch (err) { 
-            return res.status(400).json({
+            return res.status(500).json({
                 error: true,
                 message: "An internal server validation error has occurred"
             })

@@ -11,26 +11,26 @@ const log: debug.IDebugger = debug('app:in-memory-dao');
 class UserDao {
    
     constructor() {
-        log('Created new instance of InventoryDao');
+        log('Created new instance o');
     }
 
     async register(user: UserDto) {
         const {name,email,password} = user
-        const doesUserExist = await UserEntity.findOne({ email: email })
+        const addRepository = getRepository(UserEntity)
+        const doesUserExist = await addRepository.findOne({ email: email })
 
         if(doesUserExist?.email === email) throw new Error("Username taken")
 
         const uid = uuidv4()
-
         try{
             const passwordHashed = await argon2.hash(password)
-
-            const newUser = new UserEntity()
-            newUser.name = name.trim()
-            newUser.email = email.trim()
-            newUser.password = passwordHashed
-            newUser.uid = uid
-            const result =   await newUser.save()
+            const newUser = addRepository.create({
+                name:name.trim(),
+                email:email.trim(),
+                password:passwordHashed,
+                uid:uid
+            });
+            const result =  await addRepository.save(newUser);
             return {
                 name,
                 email,
@@ -38,15 +38,15 @@ class UserDao {
                 createdAt:result.createdAt
             }
         } catch(err) {
-           throw err;
+            console.log(err)
+            throw new Error("error")
         }
     }
 
     async getUser(uid: string) {
-        const user = await UserEntity.findOne({ uid: uid })
-
+        const addRepository = getRepository(UserEntity)
+        const user = await addRepository.findOne({ uid: uid })
         if(!user) throw new Error("Invalied uid")
-
         return {
             name:user.name,
             email:user.email,

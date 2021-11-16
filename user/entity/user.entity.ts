@@ -1,9 +1,9 @@
-import {Entity, BaseEntity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
  
 @Entity()
-class UserEntity extends BaseEntity {
+class UserEntity {
   @PrimaryGeneratedColumn()
-  public id: number;
+  id: number;
 
   @Column()
   uid: string;
@@ -12,7 +12,7 @@ class UserEntity extends BaseEntity {
   email: string;
  
   @Column()
-  public name: string;
+  name: string;
  
   @Column()
   password: string;
